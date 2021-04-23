@@ -65,7 +65,7 @@ class BitrixableTestCase extends BaseTestCase
         }
 
         $result = false;
-        if (mysqli_query($db,"DESCRIBE b_users ")){
+        if (mysqli_query($db,"DESCRIBE b_user")){
             $result = true;
         }
 
