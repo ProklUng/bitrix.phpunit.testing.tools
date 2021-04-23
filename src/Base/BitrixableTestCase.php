@@ -22,7 +22,10 @@ class BitrixableTestCase extends BaseTestCase
         putenv('MYSQL_USER=root');
         putenv('MYSQL_PASSWORD=');
 
-        // \Sheerockoff\BitrixCi\Bootstrap::migrate();
+        if (!$this->checkExistBaseContent()) {
+            \Sheerockoff\BitrixCi\Bootstrap::migrate();
+        }
+
         \Sheerockoff\BitrixCi\Bootstrap::bootstrap();
     }
 
@@ -41,5 +44,32 @@ class BitrixableTestCase extends BaseTestCase
         if ($GLOBALS['APPLICATION']) {
             $GLOBALS['APPLICATION']->RestartBuffer();
         }
+    }
+
+    /**
+     * Проверка - база не пустая ли.
+     *
+     * @return boolean
+     */
+    protected function checkExistBaseContent() : bool
+    {
+        $db = mysqli_connect(
+            getenv('MYSQL_HOST', true) ?: getenv('MYSQL_HOST'),
+            getenv('MYSQL_USER', true) ?: getenv('MYSQL_USER'),
+            getenv('MYSQL_PASSWORD', true) ?: getenv('MYSQL_PASSWORD'),
+            getenv('MYSQL_DATABASE', true) ?: getenv('MYSQL_DATABASE')
+        );
+
+        if (!$db) {
+            throw new \InvalidArgumentException('Mysql connection error.');
+        }
+
+        $result = false;
+        if (mysqli_query($db,"DESCRIBE b_users ")){
+            $result = true;
+        }
+
+        mysqli_close($db);
+        return $result;
     }
 }
