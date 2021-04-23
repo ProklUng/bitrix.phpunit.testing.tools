@@ -1,0 +1,30 @@
+{
+    "name": "proklung/bitrix-phpunit-testing-tools",
+    "description": "Bitrix PHPUNIT testing tools.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gavrilov Fedy",
+            "email": "fedor.gavrilov.75@mail.ru",
+            "homepage": "https://github.com/ProklUng"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ProklUng/bitrix.phpunit.testing.tools/issues",
+        "source": "https://github.com/ProklUng/bitrix.phpunit.testing.tools"
+    },
+    "autoload": {
+        "psr-4": {
+            "Prokl\\BitrixTestingTools\\": "src"
+        }
+    },
+    "require": {
+        "proklung/phpunit-testing-tools": "^1.0",
+        "symfony/dependency-injection": "^4.0 || ^5.0",
+        "symfony/http-kernel": "^4.0 || ^5.0",
+        "symfony/config": "~4|~5",
+        "symfony/framework-bundle": "^4.0 || ^5.0",
+        "sheerockoff/bitrix-ci": "^20.5"
+    }
+}
