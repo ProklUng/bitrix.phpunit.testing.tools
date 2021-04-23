@@ -32,6 +32,14 @@ class BitrixableTestCase extends BaseTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        ob_get_clean(); // Битриксовые штучки-дрючки.
+
+        // Битриксовые штучки-дрючки с буфером.
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        if ($GLOBALS['APPLICATION']) {
+            $GLOBALS['APPLICATION']->RestartBuffer();
+        }
     }
 }
