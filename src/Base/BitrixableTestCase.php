@@ -2,8 +2,10 @@
 
 namespace Prokl\BitrixTestingTools\Base;
 
+use Prokl\BitrixTestingTools\Migrator;
 use Prokl\BitrixTestingTools\Helpers\ClassUtils;
 use Prokl\BitrixTestingTools\Helpers\Database;
+use Prokl\BitrixTestingTools\Traits\CustomDumpTrait;
 use Prokl\BitrixTestingTools\Traits\ResetDatabaseTrait;
 use Prokl\TestingTools\Base\BaseTestCase;
 use Sheerockoff\BitrixCi\Bootstrap;
@@ -33,12 +35,12 @@ class BitrixableTestCase extends BaseTestCase
         if ($this->dropBase) {
             $dbManager->dropBase();
             $dbManager->createDatabaseIfNotExist();
-            Bootstrap::migrate();
+            $this->migrateDatabase();
         } else {
             $dbManager->createDatabaseIfNotExist();
 
             if ($dbManager->hasEmptyBase()) {
-                Bootstrap::migrate();
+                $this->migrateDatabase();
             }
         }
 
@@ -52,14 +54,7 @@ class BitrixableTestCase extends BaseTestCase
     {
         parent::tearDown();
 
-        // Битриксовые штучки-дрючки с буфером.
-        while (ob_get_level()) {
-            ob_end_clean();
-        }
-
-        if ($GLOBALS['APPLICATION']) {
-            $GLOBALS['APPLICATION']->RestartBuffer();
-        }
+        $this->clearBitrixBuffer();
 
         if ($this->dropBase) {
             $dbManager = $this->getDbManager();
@@ -78,6 +73,32 @@ class BitrixableTestCase extends BaseTestCase
         putenv('MYSQL_DATABASE=bitrix_ci');
         putenv('MYSQL_USER=root');
         putenv('MYSQL_PASSWORD=');
+    }
+
+    /**
+     * Битриксовые штучки-дрючки с буфером.
+     *
+     * @return void
+     */
+    private function clearBitrixBuffer() : void
+    {
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        if ($GLOBALS['APPLICATION']) {
+            $GLOBALS['APPLICATION']->RestartBuffer();
+        }
+    }
+
+    /**
+     * Загрузить дамп - кастомный или нативный.
+     *
+     * @return void
+     */
+    private function migrateDatabase() : void
+    {
+        $this->useCustomDump() ? Migrator::migrate($this->getDumpPath()) : Bootstrap::migrate();
     }
 
     /**
@@ -105,5 +126,17 @@ class BitrixableTestCase extends BaseTestCase
         $traits = ClassUtils::class_uses_recursive($this);
 
         return in_array(ResetDatabaseTrait::class, $traits, true);
+    }
+
+    /**
+     * Использовать ли кастомный дамп. Признак - трэйт CustomDumpTrait.
+     *
+     * @return boolean
+     */
+    private function useCustomDump() : bool
+    {
+        $traits = ClassUtils::class_uses_recursive($this);
+
+        return in_array(CustomDumpTrait::class, $traits, true);
     }
 }
