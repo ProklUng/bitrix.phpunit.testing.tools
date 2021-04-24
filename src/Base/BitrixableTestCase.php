@@ -58,9 +58,6 @@ class BitrixableTestCase extends BaseTestCase
 
             $migrator->createMigrationsTable();
             $migrator->migrate();
-
-            // $migrator->makeMigration('Testing');
-
         }
     }
 

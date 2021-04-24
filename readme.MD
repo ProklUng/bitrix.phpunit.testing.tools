@@ -37,7 +37,9 @@
 
 #### Трэйт CustomDumpTrait
 
-Сбрасывать базу и загружать кастомный дамп базы. Путь к дампу указывается в методе `getDumpPath` теста.
+Сбрасывать базу и загружать кастомный дамп базы. 
+
+Путь к дампу указывается в методе `getDumpPath` теста:
 
 ```php
     protected function getDumpPath() : string
@@ -47,6 +49,23 @@
 
 ```
 Действует только в сочетании с `ResetDatabaseTrait`.
+
+#### Трэйт UseMigrationsTrait
+
+Указание запускать миграции перед каждым запуском теста. 
+
+Под капотом урезанная версия [пакета](https://github.com/arrilot/bitrix-migrations), так что подходят миграции и от него. 
+За одним исключением - миграция наследуется не от класса `Arrilot\BitrixMigrations\BaseMigrations\BitrixMigration`, а от 
+`Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration`.
+
+Путь к директории с миграциями указывается в методе `getMigrationsDir` теста:
+
+```php
+    protected function getMigrationsDir() : string
+    {
+        return __DIR__ . '/../migrations';
+    }
+```
 
 ### Инвокеры
 
