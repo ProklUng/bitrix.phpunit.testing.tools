@@ -46,11 +46,11 @@
 ```
 Действует только в сочетании с `ResetDatabaseTrait`.
 
-## Инвокеры
+### Инвокеры
 
 Из [пакета](https://github.com/worksolutions/bitrix-module-bunit). Переработаны под частные нужды.
 
-# Нюансы
+#### Нюансы
 
 Для помощи в тестировании кода компонента используется класс ```Prokl\BitrixTestingTools\Invokers\ComponentInvoker```
 
