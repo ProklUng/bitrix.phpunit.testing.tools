@@ -2,6 +2,8 @@
 
 namespace Prokl\BitrixTestingTools\Traits;
 
+use Prokl\BitrixTestingTools\Migrations\ArrilotMigratorProcessor;
+
 /**
  * Trait UseMigrationsTrait
  * Использовать миграции.
@@ -19,5 +21,22 @@ trait UseMigrationsTrait
     protected function getMigrationsDir() : string
     {
         return '';
+    }
+
+    /**
+     * Создать миграцию.
+     *
+     * @param string $name     Название.
+     * @param string $template Шаблон.
+     *
+     * @return void
+     */
+    protected function makeMigration(string $name, string $template) : void
+    {
+        $migrator = new ArrilotMigratorProcessor();
+        $migrator->setMigrationsDir($this->getMigrationsDir())
+                 ->init();
+
+        $migrator->makeMigration($name, $template);
     }
 }

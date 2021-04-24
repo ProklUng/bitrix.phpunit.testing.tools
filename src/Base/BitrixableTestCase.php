@@ -2,6 +2,7 @@
 
 namespace Prokl\BitrixTestingTools\Base;
 
+use Exception;
 use Prokl\BitrixTestingTools\Migrations\ArrilotMigratorProcessor;
 use Prokl\BitrixTestingTools\Migrator;
 use Prokl\BitrixTestingTools\Helpers\ClassUtils;
@@ -26,6 +27,7 @@ class BitrixableTestCase extends BaseTestCase
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     protected function setUp(): void
     {
@@ -54,7 +56,7 @@ class BitrixableTestCase extends BaseTestCase
             $migrator = new ArrilotMigratorProcessor();
 
             $migrator->setMigrationsDir($this->getMigrationsDir())
-                ->init();
+                      ->init();
 
             $migrator->createMigrationsTable();
             $migrator->migrate();

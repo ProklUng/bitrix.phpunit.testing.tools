@@ -67,6 +67,58 @@
     }
 ```
 
+К трэйту приложен метод-хелпер `makeMigration` для создания миграций по шаблону.
+
+```php
+    protected function makeMigration(string $name, string $template) : void
+```
+
+Имеющиеся шаблоны:
+
+<table>
+<tr><th>Название</th><th>Описание</th><th>Алиасы</th></tr>
+<tr>
+    <td>`default`</td>
+    <td>Чистый шаблон по умолчанию</td>
+    <td></td>
+</tr>
+<tr>
+    <td>`add_iblock_type`</td>
+    <td>Добавление типа инфоблока</td>
+    <td></td>
+</tr>
+<tr>
+    <td>`add_iblock`</td>
+    <td>Добавление инфоблока</td>
+    <td></td>
+</tr>
+<tr>
+    <td>`add_iblock_element_property`</td>
+    <td>Добавление свойства в инфоблок</td>
+    <td>`add_iblock_prop`, `add_iblock_element_prop`, `add_element_prop`, `add_element_property`</td>
+</tr>
+<tr>
+    <td>`add_uf`</td>
+    <td>Добавление UF свойства</td>
+    <td></td>
+</tr>
+<tr>
+    <td>`query`</td>
+    <td>Произвольный запрос в БД через АПИ d7</td>
+    <td></td>
+</tr>
+<tr>
+    <td>`add_table`</td>
+    <td>Создание таблицы через АПИ d7</td>
+    <td>`create_table`</td>
+</tr>
+<tr>
+    <td>`delete_table`</td>
+    <td>Удаление таблицы через АПИ d7</td>
+    <td>`drop_table`</td>
+</tr>
+</table>
+
 ### Инвокеры
 
 Из [пакета](https://github.com/worksolutions/bitrix-module-bunit). Переработаны под частные нужды.
