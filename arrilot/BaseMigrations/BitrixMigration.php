@@ -249,4 +249,30 @@ class BitrixMigration implements MigrationInterface
 
         return $prop['ID'];
     }
+
+    /**
+     * @param integer        $idIblock
+     * @param integer|string $code
+     * @param array          $fields
+     *
+     * @return void
+     * @throws MigrationException
+     */
+    public function updateProperty(int $idIblock, string $code, array $fields) : void
+    {
+        $idIblock = (int)$idIblock;
+        if ($idIblock <= 0) {
+            throw new MigrationException('You must set iblock id due to ambiguity avoiding');
+        }
+
+        $arProperty = CIBlockProperty::GetList([], ['IBLOCK_ID' => $idIblock, 'CODE' => $code])->Fetch();
+        if (!$arProperty['ID']) {
+            throw new MigrationException(sprintf('Can\'t find property "%s" in iblock %d', $code, $idIblock));
+        }
+
+        $prop = new CIBlockProperty();
+        if (!$prop->Update($arProperty['ID'], $fields)) {
+            throw new MigrationException(sprintf('Can\'t update property "%s" with error: %s', $code, $prop->LAST_ERROR));
+        }
+    }
 }

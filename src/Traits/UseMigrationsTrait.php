@@ -18,10 +18,7 @@ trait UseMigrationsTrait
      *
      * @return string
      */
-    protected function getMigrationsDir() : string
-    {
-        return '';
-    }
+    abstract protected function getMigrationsDir() : string;
 
     /**
      * Создать миграцию.

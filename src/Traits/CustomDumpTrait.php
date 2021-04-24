@@ -16,8 +16,5 @@ trait CustomDumpTrait
      *
      * @return string
      */
-    protected function getDumpPath() : string
-    {
-        return '';
-    }
+    abstract protected function getDumpPath() : string;
 }
