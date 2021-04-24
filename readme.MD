@@ -11,6 +11,22 @@
 Базовый класс для тестов - `BitrixableTestCase`. Запускает, приложенный к пакету Битрикс и позволяет использовать в тестах
 его API.
 
+Параметры доступа к БД определяются в методе `setupDatabaseData` базового класса `BitrixableTestCase`.
+
+По умолчанию:
+
+```php
+    protected function setupDatabaseData() : void
+    {
+        putenv('MYSQL_HOST=localhost');
+        putenv('MYSQL_DATABASE=bitrix_ci');
+        putenv('MYSQL_USER=root');
+        putenv('MYSQL_PASSWORD=');
+    }
+```
+
+Можно переопределить в каждом конкретном тесте.
+
 ### Управление
 
 #### Трэйт ResetDatabaseTrait
