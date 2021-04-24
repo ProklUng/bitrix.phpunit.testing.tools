@@ -52,7 +52,7 @@
 
 #### Трэйт UseMigrationsTrait
 
-Указание запускать миграции перед каждым запуском теста. 
+Указание запускать миграции перед каждым тестом. 
 
 Под капотом урезанная версия [пакета](https://github.com/arrilot/bitrix-migrations), так что подходят миграции и от него. 
 За одним исключением - миграция наследуется не от класса `Arrilot\BitrixMigrations\BaseMigrations\BitrixMigration`, а от 
