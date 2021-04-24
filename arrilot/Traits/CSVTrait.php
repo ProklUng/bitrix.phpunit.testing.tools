@@ -11,6 +11,7 @@ use CIBlockSection;
 use CUtil;
 use DateTimeImmutable;
 use DateTimeZone;
+use RuntimeException;
 
 /**
  * @mixin BitrixMigration
@@ -37,12 +38,14 @@ trait CSVTrait
 
         $element = new CIBlockElement();
 
+        $count = 0;
         while ($record = fgetcsv($file, 0, ';')) {
             $sections = [];
             foreach ($this->getImportDefinitionSections() as $sectionKey) {
                 $sections[] = $record[$sectionKey];
             }
-            $sectionId = $this->getSectionId($sections);
+
+            $sectionId = $this->getSectionId((array)$sections);
 
             $fields = [
                 'IBLOCK_ID'         => $iblockId,
@@ -79,6 +82,8 @@ trait CSVTrait
             // файла с названиями столбцов.
             $element->Add($fields, false, false);
         }
+
+        fclose($file);
     }
 
     /**
@@ -90,17 +95,19 @@ trait CSVTrait
     private function getSectionId($sections)
     {
         $sections = array_filter($sections);
+
         if (count($sections) === 0) {
-            return 0;
+            return false;
         }
 
         $hash = md5(implode('|', $sections));
         if (empty($this->sectionCache[$hash])) {
-            $sectionCurrent = array_pop($sections);
+            $sectionCurrent = count($sections) > 1 ?  array_pop($sections) : $sections;
+
             $parentId = $this->getSectionId(...$sections);
             $fields = [
-                'NAME'              => $sectionCurrent,
-                'CODE'              => CUtil::translit($sectionCurrent, 'ru', [
+                'NAME'              => current($sectionCurrent),
+                'CODE'              => CUtil::translit(current($sectionCurrent), 'ru', [
                     'replace_space' => '-',
                     'replace_other' => '-',
                 ]),
