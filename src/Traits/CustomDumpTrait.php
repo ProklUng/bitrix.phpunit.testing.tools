@@ -13,6 +13,7 @@ trait CustomDumpTrait
 {
     /**
      * Путь к кастомному дампу БД.
+     *
      * @return string
      */
     protected function getDumpPath() : string
