@@ -1,0 +1,38 @@
+<?php
+
+use Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration;
+use Arrilot\BitrixMigrationsFork\Exceptions\MigrationException;
+
+class __className__ extends BitrixMigration
+{
+    /**
+     * Run the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function up()
+    {
+        $fields = __fields__;
+
+        $id = $this->getIblockPropIdByCode(__code__, __iblockId__);
+        $fields['ID'] = $id;
+
+        $ibp = new CIBlockProperty();
+        $updated = $ibp->update($id, $fields);
+
+        if (!$updated) {
+            throw new MigrationException('Ошибка при изменении свойства инфоблока '.$ibp->LAST_ERROR);
+        }
+    }
+
+    /**
+     * Reverse the migration.
+     *
+     * @return mixed
+     */
+    public function down()
+    {
+        return false;
+    }
+}

@@ -1,0 +1,37 @@
+<?php
+
+use Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration;
+use Arrilot\BitrixMigrationsFork\Exceptions\MigrationException;
+
+class __className__ extends BitrixMigration
+{
+    /**
+     * Run the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function up()
+    {
+        $fields = __fields__;
+        $id = $this->getUFIdByCode(__entity__, __code__);
+
+        $oUserTypeEntity = new CUserTypeEntity();
+
+        $dbResult = $oUserTypeEntity->delete($id);
+        if (!$dbResult->result) {
+            throw new MigrationException("Не удалось обновить удалить свойство с FIELD_NAME = {$fields['FIELD_NAME']} и ENTITY_ID = {$fields['ENTITY_ID']}");
+        }
+    }
+
+    /**
+     * Reverse the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function down()
+    {
+        return false;
+    }
+}

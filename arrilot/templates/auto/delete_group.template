@@ -1,0 +1,37 @@
+<?php
+
+use Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration;
+use Arrilot\BitrixMigrationsFork\Exceptions\MigrationException;
+use Bitrix\Highloadblock\HighloadBlockTable;
+
+class __className__ extends BitrixMigration
+{
+    /**
+     * Run the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function up()
+    {
+        $group = new CGroup;
+
+        $this->db->startTransaction();
+        if (!$group->delete(__id__)) {
+            $this->db->rollbackTransaction();
+            throw new MigrationException('Ошибка при удалении группы '.$group->LAST_ERROR);
+        }
+        $this->db->commitTransaction();
+    }
+
+    /**
+     * Reverse the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function down()
+    {
+        return false;
+    }
+}

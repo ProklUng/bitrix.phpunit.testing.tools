@@ -2,12 +2,15 @@
 
 namespace Prokl\BitrixTestingTools\Base;
 
+use Prokl\BitrixTestingTools\Migrations\ArrilotMigratorProcessor;
 use Prokl\BitrixTestingTools\Migrator;
 use Prokl\BitrixTestingTools\Helpers\ClassUtils;
 use Prokl\BitrixTestingTools\Helpers\Database;
 use Prokl\BitrixTestingTools\Traits\CustomDumpTrait;
 use Prokl\BitrixTestingTools\Traits\ResetDatabaseTrait;
+use Prokl\BitrixTestingTools\Traits\UseMigrationsTrait;
 use Prokl\TestingTools\Base\BaseTestCase;
+use RuntimeException;
 use Sheerockoff\BitrixCi\Bootstrap;
 
 /**
@@ -45,6 +48,20 @@ class BitrixableTestCase extends BaseTestCase
         }
 
         Bootstrap::bootstrap();
+
+        // Миграции
+        if ($this->useMigrations()) {
+            $migrator = new ArrilotMigratorProcessor();
+
+            $migrator->setMigrationsDir($this->getMigrationsDir())
+                ->init();
+
+            $migrator->createMigrationsTable();
+            $migrator->migrate();
+
+            // $migrator->makeMigration('Testing');
+
+        }
     }
 
     /**
@@ -123,9 +140,7 @@ class BitrixableTestCase extends BaseTestCase
      */
     private function needDropBase() : bool
     {
-        $traits = ClassUtils::class_uses_recursive($this);
-
-        return in_array(ResetDatabaseTrait::class, $traits, true);
+        return $this->hasTrait(ResetDatabaseTrait::class);
     }
 
     /**
@@ -135,8 +150,30 @@ class BitrixableTestCase extends BaseTestCase
      */
     private function useCustomDump() : bool
     {
+        return $this->hasTrait(CustomDumpTrait::class);
+    }
+
+    /**
+     * Использовать ли миграции. Признак - трэйт UseMigrationsTrait.
+     *
+     * @return boolean
+     */
+    private function useMigrations() : bool
+    {
+        return $this->hasTrait(UseMigrationsTrait::class);
+    }
+
+    /**
+     * Имеет ли экземпляр класса тот или иной трэйт.
+     *
+     * @param string $trait
+     *
+     * @return boolean
+     */
+    private function hasTrait(string $trait) : bool
+    {
         $traits = ClassUtils::class_uses_recursive($this);
 
-        return in_array(CustomDumpTrait::class, $traits, true);
+        return in_array($trait, $traits, true);
     }
 }

@@ -1,0 +1,44 @@
+<?php
+
+use Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration;
+use Arrilot\BitrixMigrationsFork\Exceptions\MigrationException;
+
+class __className__ extends BitrixMigration
+{
+    /**
+     * Run the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function up()
+    {
+        $iblockId = $this->getIblockIdByCode('__');
+
+        $propId = $this->addIblockElementProperty([
+            'NAME' => '__',
+            'SORT' => 500,
+            'CODE' => '__',
+            'PROPERTY_TYPE' => 'L', // Список
+            'LIST_TYPE' => 'C', // Тип списка - 'флажки'
+            'VALUES' => [
+                'VALUE' => 'да',
+            ],
+            'MULTIPLE'  => 'N',
+            'IS_REQUIRED' => 'N',
+            'IBLOCK_ID' => $iblockId
+        ]);
+    }
+
+    /**
+     * Reverse the migration.
+     *
+     * @return mixed
+     */
+    public function down()
+    {
+        $iblockId = $this->getIblockIdByCode('__');
+
+        $this->deleteIblockElementPropertyByCode($iblockId, '__');
+    }
+}

@@ -1,0 +1,36 @@
+<?php
+
+use Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration;
+use Arrilot\BitrixMigrationsFork\Exceptions\MigrationException;
+
+class __className__ extends BitrixMigration
+{
+    /**
+     * Run the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function up()
+    {
+        $fields = __fields__;
+
+        $this->addUF($fields);
+    }
+
+    /**
+     * Reverse the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function down()
+    {
+        $id = $this->getUFIdByCode(__entity__, __code__);
+        if (!$id) {
+            throw new MigrationException('Не найдено пользовательское свойство для удаления');
+        }
+
+        (new CUserTypeEntity())->delete($id);
+    }
+}

@@ -1,0 +1,37 @@
+<?php
+
+use Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration;
+use Arrilot\BitrixMigrationsFork\Exceptions\MigrationException;
+use Bitrix\Highloadblock\HighloadBlockTable;
+
+class __className__ extends BitrixMigration
+{
+    /**
+     * Run the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function up()
+    {
+        $group = new CGroup;
+        $fields = __fields__;
+
+        $id = $group->add($fields);
+
+        if ($group->LAST_ERROR) {
+            throw new MigrationException('Ошибка при добавлении группы '.$group->LAST_ERROR);
+        }
+    }
+
+    /**
+     * Reverse the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function down()
+    {
+        return false;
+    }
+}

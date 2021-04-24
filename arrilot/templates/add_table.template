@@ -1,0 +1,45 @@
+<?php
+
+use Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration;
+use Arrilot\BitrixMigrationsFork\Exceptions\MigrationException;
+use Bitrix\Highloadblock\HighloadBlockTable;
+
+class __className__ extends BitrixMigration
+{
+    protected $table = '';
+
+    /**
+     * Run the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function up()
+    {
+        $fields = [
+            "ID" => new \Bitrix\Main\Entity\IntegerField("ID", [
+                'primary' => true,
+                'unique' => true,
+                'required' => true,
+            ]),
+            "VALUE" => new \Bitrix\Main\Entity\StringField("VALUE", [
+                'required' => true,
+            ]),
+        ];
+        $primary = ["ID"];
+        $autoincrement = ["ID"];
+
+        $this->db->createTable($this->table, $fields, $primary, $autoincrement);
+    }
+
+    /**
+     * Reverse the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function down()
+    {
+        $this->db->dropTable($this->table);
+    }
+}

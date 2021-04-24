@@ -16,7 +16,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Prokl\\BitrixTestingTools\\": "src"
+            "Prokl\\BitrixTestingTools\\": "src",
+            "Arrilot\\BitrixMigrationsFork\\": "arrilot/"
         }
     },
     "require": {
