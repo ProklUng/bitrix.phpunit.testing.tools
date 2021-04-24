@@ -32,7 +32,7 @@
 
 ## Инвокеры
 
-Из [пакета](https://github.com/worksolutions/bitrix-module-bunit) взяты и переработаны под частные нужды.
+Из [пакета](https://github.com/worksolutions/bitrix-module-bunit). Переработаны под частные нужды.
 
 # Нюансы
 
