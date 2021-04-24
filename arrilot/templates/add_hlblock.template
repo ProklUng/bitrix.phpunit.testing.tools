@@ -1,0 +1,39 @@
+<?php
+
+use Arrilot\BitrixMigrationsFork\BaseMigrations\BitrixMigration;
+use Arrilot\BitrixMigrationsFork\Exceptions\MigrationException;
+use Bitrix\Highloadblock\HighloadBlockTable;
+use Arrilot\BitrixMigrationsFork\Utils\Helper;
+
+class __className__ extends BitrixMigration
+{
+    /**
+     * Run the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function up()
+    {
+        $fields = __fields__;
+
+        $result = HighloadBlockTable::add($fields);
+
+        if (!$result->isSuccess()) {
+            $errors = $result->getErrorMessages();
+            throw new MigrationException('Ошибка при добавлении hl-блока '.implode(', ', $errors));
+        }
+    }
+
+    /**
+     * Reverse the migration.
+     *
+     * @return mixed
+     * @throws MigrationException
+     */
+    public function down()
+    {
+        $id = Helper::getHighloadIdByTable('__table__');
+        HighloadBlockTable::delete($id);
+    }
+}
