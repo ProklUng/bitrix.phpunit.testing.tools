@@ -2,7 +2,11 @@
 
 namespace Prokl\BitrixTestingTools\Base;
 
+use Prokl\BitrixTestingTools\Helpers\ClassUtils;
+use Prokl\BitrixTestingTools\Helpers\Database;
+use Prokl\BitrixTestingTools\Traits\ResetDatabaseTrait;
 use Prokl\TestingTools\Base\BaseTestCase;
+use Sheerockoff\BitrixCi\Bootstrap;
 
 /**
  * Class BitrixableTestCase
@@ -11,22 +15,34 @@ use Prokl\TestingTools\Base\BaseTestCase;
 class BitrixableTestCase extends BaseTestCase
 {
     /**
+     * @var boolean $dropBase Сбрасывать ли базу после каждого теста.
+     */
+    private $dropBase = false;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        putenv('MYSQL_HOST=localhost');
-        putenv('MYSQL_DATABASE=bitrix_ci');
-        putenv('MYSQL_USER=root');
-        putenv('MYSQL_PASSWORD=');
+        $this->setupDatabaseData();
+        $this->dropBase = $this->needDropBase();
+        $dbManager = $this->getDbManager();
 
-        if (!$this->checkExistBaseContent()) {
-            \Sheerockoff\BitrixCi\Bootstrap::migrate();
+        if ($this->dropBase) {
+            $dbManager->dropBase();
+            $dbManager->createDatabaseIfNotExist();
+            Bootstrap::migrate();
+        } else {
+            $dbManager->createDatabaseIfNotExist();
+
+            if ($dbManager->hasEmptyBase()) {
+                Bootstrap::migrate();
+            }
         }
 
-        \Sheerockoff\BitrixCi\Bootstrap::bootstrap();
+        Bootstrap::bootstrap();
     }
 
     /**
@@ -44,32 +60,50 @@ class BitrixableTestCase extends BaseTestCase
         if ($GLOBALS['APPLICATION']) {
             $GLOBALS['APPLICATION']->RestartBuffer();
         }
+
+        if ($this->dropBase) {
+            $dbManager = $this->getDbManager();
+            $dbManager->dropBase();
+        }
     }
 
     /**
-     * Проверка - база не пустая ли.
+     * Параметры подключения к тестовой базе.
+     *
+     * @return void
+     */
+    protected function setupDatabaseData() : void
+    {
+        putenv('MYSQL_HOST=localhost');
+        putenv('MYSQL_DATABASE=bitrix_ci');
+        putenv('MYSQL_USER=root');
+        putenv('MYSQL_PASSWORD=');
+    }
+
+    /**
+     * Экземпляр менеджера БД.
+     *
+     * @return Database
+     */
+    private function getDbManager() : Database
+    {
+        return new Database(
+            getenv('MYSQL_HOST', true) ?: getenv('MYSQL_HOST'),
+            getenv('MYSQL_DATABASE', true) ?: getenv('MYSQL_DATABASE'),
+            getenv('MYSQL_USER', true) ?: getenv('MYSQL_USER'),
+            getenv('MYSQL_PASSWORD', true) ?: getenv('MYSQL_PASSWORD')
+        );
+    }
+
+    /**
+     * Нужно ли сбрасывать базу. Признак - трэйт ResetDatabaseTrait.
      *
      * @return boolean
      */
-    protected function checkExistBaseContent() : bool
+    private function needDropBase() : bool
     {
-        $db = mysqli_connect(
-            getenv('MYSQL_HOST', true) ?: getenv('MYSQL_HOST'),
-            getenv('MYSQL_USER', true) ?: getenv('MYSQL_USER'),
-            getenv('MYSQL_PASSWORD', true) ?: getenv('MYSQL_PASSWORD'),
-            getenv('MYSQL_DATABASE', true) ?: getenv('MYSQL_DATABASE')
-        );
+        $traits = ClassUtils::class_uses_recursive($this);
 
-        if (!$db) {
-            throw new \InvalidArgumentException('Mysql connection error.');
-        }
-
-        $result = false;
-        if (mysqli_query($db,"DESCRIBE b_user")){
-            $result = true;
-        }
-
-        mysqli_close($db);
-        return $result;
+        return in_array(ResetDatabaseTrait::class, $traits, true);
     }
 }
