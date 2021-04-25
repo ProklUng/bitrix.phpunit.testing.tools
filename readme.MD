@@ -6,6 +6,16 @@
 
 `composer require --dev proklung/bitrix-phpunit-testing-tools`
 
+В пакете, использующем этот пакет как зависимость, в composer.json должна быть секция (нужно, чтобы модуль миграций установился куда надо):
+
+```json
+    "extra": {
+        "installer-paths": {
+            "vendor/sheerockoff/bitrix-ci/files/bitrix/modules/{$name}/": ["type:bitrix-module"]
+        }
+    }
+```
+
 ## Нюансы
 
 Базовый класс для тестов - `BitrixableTestCase`. Запускает, приложенный к пакету Битрикс и позволяет использовать в тестах
