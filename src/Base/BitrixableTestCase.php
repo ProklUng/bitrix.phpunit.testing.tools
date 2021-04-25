@@ -100,15 +100,7 @@ class BitrixableTestCase extends BaseTestCase
     private function clearBitrixBuffer() : void
     {
         $output = $GLOBALS['APPLICATION']->EndBufferContentMan();
-
-        // Эксперимент.
-//        while (ob_get_level()) {
-//            ob_end_clean();
-//        }
-//
-//        if ($GLOBALS['APPLICATION']) {
-//            $GLOBALS['APPLICATION']->RestartBuffer();
-//        }
+        echo $output;
     }
 
     /**
