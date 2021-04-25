@@ -53,6 +53,27 @@
 При использовании дампов с боя обычно возникают проблемы с просроченностью лицензии. В таком случае приходится вручную
 заменить файл `include.php` в `vendor/sheerockoff/bitrix-ci/files/bitrix/modules/main`.
 
+#### Трэйт SprintMigrationsTrait
+
+Использование миграций модуля [sprint.option](https://github.com/andreyryabin/sprint.migration).
+
+Путь к директории с миграциями указывается в методе `getPathSprintMigrations` теста:
+
+```php
+    protected function getPathSprintMigrations() : string
+    {
+        return __DIR__ . '../../../../../../Tests/sprint_migrations/';
+    }
+```
+
+##### Нюансы
+
+В силу особенностей использования сборки [Bitrix CI](https://github.com/sheerockoff/bitrix-ci) приходится устанавливать модуль хитро - прямо внутрь пакета сборки
+(в папку `vendor/sheerockoff/bitrix-ci/files/bitrix/modules/sprint.option`) на стадии работы композера. Побочный эффект - если обновится сама сборка, 
+то модуль миграций улетит в трубу. 
+
+Пока так. 
+
 #### Трэйт UseMigrationsTrait
 
 Указание запускать миграции перед каждым тестом. 

@@ -2,6 +2,7 @@
 
 namespace Prokl\BitrixTestingTools\Base;
 
+use Bitrix\Catalog\Model\Price;
 use Exception;
 use Prokl\BitrixTestingTools\Migrations\ArrilotMigratorProcessor;
 use Prokl\BitrixTestingTools\Migrator;
@@ -9,6 +10,7 @@ use Prokl\BitrixTestingTools\Helpers\ClassUtils;
 use Prokl\BitrixTestingTools\Helpers\Database;
 use Prokl\BitrixTestingTools\Traits\CustomDumpTrait;
 use Prokl\BitrixTestingTools\Traits\ResetDatabaseTrait;
+use Prokl\BitrixTestingTools\Traits\SprintMigrationsTrait;
 use Prokl\BitrixTestingTools\Traits\UseMigrationsTrait;
 use Prokl\TestingTools\Base\BaseTestCase;
 use Sheerockoff\BitrixCi\Bootstrap;
@@ -55,12 +57,18 @@ class BitrixableTestCase extends BaseTestCase
         // Миграции
         if ($this->useMigrations()) {
             $migrator = new ArrilotMigratorProcessor();
-
+            /** @noinspection PhpUndefinedMethodInspection */
             $migrator->setMigrationsDir($this->getMigrationsDir())
                       ->init();
 
             $migrator->createMigrationsTable();
             $migrator->migrate();
+        }
+
+        // Миграции модуля sprint.option.
+        if ($this->useSprintMigrations()) {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $this->sprintMigration();
         }
     }
 
@@ -156,6 +164,16 @@ class BitrixableTestCase extends BaseTestCase
     private function useMigrations() : bool
     {
         return $this->hasTrait(UseMigrationsTrait::class);
+    }
+
+    /**
+     * Использовать ли миграции модуля sprint.option. Признак - трэйт SprintMigrationsTrait.
+     *
+     * @return boolean
+     */
+    private function useSprintMigrations() : bool
+    {
+        return $this->hasTrait(SprintMigrationsTrait::class);
     }
 
     /**

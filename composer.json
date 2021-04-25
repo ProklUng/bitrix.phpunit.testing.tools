@@ -23,6 +23,12 @@
     "require": {
         "proklung/phpunit-testing-tools": "^1.0",
         "sheerockoff/bitrix-ci": "^20.5",
+        "andreyryabin/sprint.migration": "^3.28.4",
         "ext-mysqli": "*"
+    },
+    "extra": {
+        "installer-paths": {
+            "vendor/sheerockoff/bitrix-ci/files/bitrix/modules/{$name}/": ["type:bitrix-module"]
+        }
     }
 }
