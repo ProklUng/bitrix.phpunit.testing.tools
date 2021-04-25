@@ -45,7 +45,7 @@ class MockerBitrixBlocks
      * Синтаксический сахар в виде статического конструктора. Мок GetNext.
      *
      * @param string $srcClass Исходный класс.
-     * @param array $fixture Фикстура.
+     * @param array  $fixture  Фикстура.
      *
      * @return mixed
      */
@@ -62,7 +62,7 @@ class MockerBitrixBlocks
      * Синтаксический сахар в виде статического конструктора. Мок Fetch.
      *
      * @param string $srcClass Исходный класс.
-     * @param array $fixture Фикстура.
+     * @param array  $fixture  Фикстура.
      *
      * @return mixed
      */
@@ -79,7 +79,7 @@ class MockerBitrixBlocks
      * Синтаксический сахар в виде статического конструктора. Мок GetNextElement.
      *
      * @param string $srcClass Исходный класс.
-     * @param array $fixture Фикстура.
+     * @param array  $fixture  Фикстура.
      *
      * @return mixed
      */
@@ -143,9 +143,9 @@ class MockerBitrixBlocks
     /**
      * Мок CIBlockElement.
      *
-     * @param string $method
-     * @param string $methodRetrieveData
-     * @param array $fixture
+     * @param array  $fixture            Фикстура.
+     * @param string $method             Битриксовый метод получения данных (GetList).
+     * @param string $methodRetrieveData Битриксовый метод извлечения результата (GetNext, Fetch).
      *
      * @return mixed
      */
@@ -169,9 +169,9 @@ class MockerBitrixBlocks
     /**
      * Мок CIBlockSection.
      *
-     * @param string $method
-     * @param string $methodRetrieveData
-     * @param array $fixture
+     * @param array  $fixture            Фикстура.
+     * @param string $method             Битриксовый метод получения данных (GetList).
+     * @param string $methodRetrieveData Битриксовый метод извлечения результата (GetNext, Fetch).
      *
      * @return mixed
      */
@@ -195,8 +195,8 @@ class MockerBitrixBlocks
     /**
      * Мок CIBlockResult. Ответ CIBlockElement -> GetList.
      *
-     * @param string $method
-     * @param array $fixture
+     * @param string $method  Метод.
+     * @param array  $fixture Фикстура.
      *
      * @return mixed
      */
@@ -238,7 +238,7 @@ class MockerBitrixBlocks
     /**
      * Мок ответа CIBlockResult - GetNextElement (GetFields).
      *
-     * @param array $fixture
+     * @param array $fixture Фикстура.
      *
      * @return mixed
      */
