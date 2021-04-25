@@ -11,7 +11,6 @@ use Prokl\BitrixTestingTools\Traits\CustomDumpTrait;
 use Prokl\BitrixTestingTools\Traits\ResetDatabaseTrait;
 use Prokl\BitrixTestingTools\Traits\UseMigrationsTrait;
 use Prokl\TestingTools\Base\BaseTestCase;
-use RuntimeException;
 use Sheerockoff\BitrixCi\Bootstrap;
 
 /**
@@ -20,6 +19,8 @@ use Sheerockoff\BitrixCi\Bootstrap;
  */
 class BitrixableTestCase extends BaseTestCase
 {
+    protected $backupGlobalsBlacklist = ['DB'];
+
     /**
      * @var boolean $dropBase Сбрасывать ли базу после каждого теста.
      */
