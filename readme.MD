@@ -208,7 +208,7 @@ public function useComponentInvoker() {
 }
 ```
 
-#### Тестирование работы адаптера шабалона (result_modifier)
+#### Тестирование работы адаптера шаблона (result_modifier)
 
 Тестировать result_modifier шаблона компонента можно объектом класса ```Prokl\BitrixTestingTools\Invokers\ResultModifierInvoker```.
 
@@ -266,4 +266,24 @@ public function handlersOfEventExist() {
 
     $this->getAssert()->asTrue($eventInvoker->countOfHandlers() > 1);
 }
+```
+
+#### Прочее
+
+- Метод `goTo` класса `BitrixableTestCase`. Эмулирует нахождение на каком-либо URL. Выставляет все, что связано с URL
+в старом ядре и D7.
+
+Также подменяет автоматом все, что возможно из супер-глобалов типа $_SERVER, $_POST и т.д.
+
+```php
+    $_GET['test'] = 'OK';
+
+    $this->goTo('/test/');
+
+    $url = $APPLICATION->GetCurPage(); // $url = '/test/index.php'
+
+    $request = Application::getInstance()->getContext()->getRequest();
+    $uriString = $request->getRequestUri(); // $uriString = '/test/'
+
+    $testGetParam = $request->getQuery('test'); // $testGetParam = 'OK'
 ```

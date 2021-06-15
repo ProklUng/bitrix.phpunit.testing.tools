@@ -2,7 +2,7 @@
 
 namespace Prokl\BitrixTestingTools\Base;
 
-use Bitrix\Catalog\Model\Price;
+use Bitrix\Main\Application;
 use Exception;
 use Prokl\BitrixTestingTools\Migrations\ArrilotMigratorProcessor;
 use Prokl\BitrixTestingTools\Migrator;
@@ -13,6 +13,8 @@ use Prokl\BitrixTestingTools\Traits\ResetDatabaseTrait;
 use Prokl\BitrixTestingTools\Traits\SprintMigrationsTrait;
 use Prokl\BitrixTestingTools\Traits\UseMigrationsTrait;
 use Prokl\TestingTools\Base\BaseTestCase;
+use ReflectionClass;
+use ReflectionException;
 use Sheerockoff\BitrixCi\Bootstrap;
 
 /**
@@ -98,6 +100,41 @@ class BitrixableTestCase extends BaseTestCase
         putenv('MYSQL_DATABASE=bitrix_ci');
         putenv('MYSQL_USER=root');
         putenv('MYSQL_PASSWORD=');
+    }
+
+    /**
+     * Эмуляция нахождения на какой-либо странице. Выставляется все, что связано с URL - как в D7,
+     * так и в старом ядре.
+     *
+     * @param string $url URL.
+     *
+     * @return void
+     *
+     * @throws ReflectionException
+     *
+     * @since 15.06.2021
+     */
+    protected function goTo(string $url) : void
+    {
+        $_SERVER['REQUEST_URI'] = $url;
+        $GLOBALS['APPLICATION']->sDirPath = GetPagePath(false, true);
+
+        $application = Application::getInstance();
+
+        $reflection = new ReflectionClass($application);
+        $reflection_property = $reflection->getProperty('isExtendedKernelInitialized');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($application, false);
+
+        $application->initializeExtendedKernel(
+            [
+                'server' => $_SERVER,
+                'get' => $_GET,
+                'post' => $_POST,
+                'files' => $_FILES,
+                'cookie' => $_COOKIE,
+            ]
+        );
     }
 
     /**
