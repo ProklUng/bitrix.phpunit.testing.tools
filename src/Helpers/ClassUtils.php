@@ -13,7 +13,7 @@ class ClassUtils
     /**
      * Returns all traits used by a class, its parent classes and trait of their traits.
      *
-     * @param  object|string  $class
+     * @param  object|string $class Класс.
      * @return array
      */
     public static function class_uses_recursive($class) : array
@@ -34,7 +34,8 @@ class ClassUtils
     /**
      * Returns all traits used by a trait and its traits.
      *
-     * @param  string  $trait
+     * @param  string $trait Трэйт.
+     *
      * @return array
      */
     public static function trait_uses_recursive($trait) : array

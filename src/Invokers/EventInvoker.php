@@ -20,21 +20,21 @@ class EventInvoker extends BaseInvoker
     /**
      * EventInvoker constructor.
      *
-     * @param $module
-     * @param string $eventName
+     * @param string $module    Модуль.
+     * @param string $eventName Название события.
      */
-    public function __construct($module, string $eventName)
+    public function __construct(string $module, string $eventName)
     {
         $this->event = new Event($module, $eventName);
     }
 
     /**
-     * @param array $listParams
+     * @param array $listParams Параметры.
      *
      * @return void
      * @throws ArgumentTypeException
      */
-    public function setExecuteParams(array $listParams)
+    public function setExecuteParams(array $listParams) : void
     {
         $this->event->setParameters($listParams);
     }
@@ -42,7 +42,7 @@ class EventInvoker extends BaseInvoker
     /**
      * @return void
      */
-    public function execute()
+    public function execute() : void
     {
         $eventManager = EventManager::getInstance();
         $eventManager->send($this->event);
@@ -54,6 +54,7 @@ class EventInvoker extends BaseInvoker
     public function countOfHandlers() : int
     {
         $eventManager = EventManager::getInstance();
+
         return count($eventManager->findEventHandlers($this->event->getModuleId(), $this->event->getEventType()));
     }
 

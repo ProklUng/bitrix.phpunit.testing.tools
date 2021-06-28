@@ -60,13 +60,15 @@ class IBlockPropertyEnum
     }
 
     /**
-     * Установить настройки для добавления значения enum инфоблока по умолчанию
-     * @param string $xml_id
-     * @param string $value
-     * @param int $propertyId
+     * Установить настройки для добавления значения enum инфоблока по умолчанию.
+     *
+     * @param string       $xml_id
+     * @param string       $value
+     * @param integer|null $propertyId
+     *
      * @return $this
      */
-    public function constructDefault($xml_id, $value, $propertyId = null)
+    public function constructDefault(string $xml_id, string $value, ?int $propertyId = null) : self
     {
          $this->setXmlId($xml_id)->setValue($value);
 
@@ -79,10 +81,12 @@ class IBlockPropertyEnum
 
     /**
      * Код свойства.
-     * @param string $propertyId
+     *
+     * @param integer $propertyId
+     *
      * @return $this
      */
-    public function setPropertyId($propertyId)
+    public function setPropertyId(int $propertyId) : self
     {
         $this->fields['PROPERTY_ID'] = $propertyId;
 
@@ -91,10 +95,12 @@ class IBlockPropertyEnum
 
     /**
      * Внешний код.
+     *
      * @param string $xml_id
+     *
      * @return $this
      */
-    public function setXmlId($xml_id)
+    public function setXmlId(string $xml_id) : self
     {
         $this->fields['XML_ID'] = $xml_id;
 
@@ -103,10 +109,12 @@ class IBlockPropertyEnum
 
     /**
      * Индекс сортировки.
-     * @param int $sort
+     *
+     * @param integer $sort
+     *
      * @return $this
      */
-    public function setSort($sort = 500)
+    public function setSort(int $sort = 500) : self
     {
         $this->fields['SORT'] = $sort;
 

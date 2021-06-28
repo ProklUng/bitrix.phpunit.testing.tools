@@ -17,10 +17,12 @@ class PHPUnitBitrixUtils
      */
     public static function getRandomIdIblock() : int
     {
+        $arIds = [];
+        
         $ib_list = CIBlock::GetList(
             [],
             [
-                "ACTIVE" => 'Y',
+                'ACTIVE' => 'Y',
             ]
         );
 
@@ -28,7 +30,7 @@ class PHPUnitBitrixUtils
             $arIds[] = $ib['ID'];
         }
 
-        if (empty($arIds)) {
+        if (count($arIds) === 0) {
             return 0;
         }
 
@@ -45,9 +47,11 @@ class PHPUnitBitrixUtils
         $ibQuery = CIBlock::GetList(
             [],
             [
-                "ACTIVE" => 'Y',
+                'ACTIVE' => 'Y',
             ]
         );
+
+        $arIds = [];
 
         while ($obIblock = $ibQuery->GetNext()) {
             if (!empty($obIblock['DESCRIPTION'])) {
@@ -55,7 +59,7 @@ class PHPUnitBitrixUtils
             }
         }
 
-        if (empty($arIds)) {
+        if (count($arIds) === 0) {
             return 0;
         }
 

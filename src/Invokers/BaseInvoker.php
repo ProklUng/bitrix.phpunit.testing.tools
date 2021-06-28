@@ -12,6 +12,11 @@ use ReflectionProperty;
  */
 abstract class BaseInvoker
 {
+    /**
+     * Исполнить.
+     *
+     * @return mixed
+     */
     abstract public function execute();
 
     /**
@@ -22,7 +27,7 @@ abstract class BaseInvoker
      * @param array|null $params Параметры.
      *
      * @return mixed
-     * @throws ReflectionException
+     * @throws ReflectionException Ошибки рефлексии.
      */
     protected function invokeMethod($object, string $method, array $params = null)
     {
@@ -39,7 +44,7 @@ abstract class BaseInvoker
      * @param string     $property Свойство.
      * @param mixed|null $value    Значение.
      *
-     * @throws ReflectionException
+     * @throws ReflectionException Ошибки рефлексии.
      */
     protected static function setObjectPropertyValue($object, string $property, $value = null)
     {
@@ -55,7 +60,7 @@ abstract class BaseInvoker
      * @param string $property Свойство.
      *
      * @return mixed
-     * @throws ReflectionException
+     * @throws ReflectionException Ошибки рефлексии.
      */
     protected function getObjectPropertyValue($object, string $property)
     {

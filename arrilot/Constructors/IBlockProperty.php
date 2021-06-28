@@ -6,6 +6,8 @@ namespace Arrilot\BitrixMigrationsFork\Constructors;
 
 use Arrilot\BitrixMigrationsFork\Logger;
 use Bitrix\Main\Application;
+use CIBlockProperty;
+use Exception;
 
 class IBlockProperty
 {
@@ -13,16 +15,16 @@ class IBlockProperty
 
     /**
      * Добавить свойство инфоблока
-     * @throws \Exception
+     * @throws Exception
      */
     public function add()
     {
-        $obj = new \CIBlockProperty();
+        $obj = new CIBlockProperty();
 
         $property_id = $obj->Add($this->getFieldsWithDefault());
 
         if (!$property_id) {
-            throw new \Exception($obj->LAST_ERROR);
+            throw new Exception($obj->LAST_ERROR);
         }
 
         Logger::log("Добавлено свойство инфоблока {$this->fields['CODE']}", Logger::COLOR_GREEN);
@@ -33,13 +35,13 @@ class IBlockProperty
     /**
      * Обновить свойство инфоблока
      * @param $id
-     * @throws \Exception
+     * @throws Exception
      */
     public function update($id)
     {
-        $obj = new \CIBlockProperty();
+        $obj = new CIBlockProperty();
         if (!$obj->Update($id, $this->fields)) {
-            throw new \Exception($obj->LAST_ERROR);
+            throw new Exception($obj->LAST_ERROR);
         }
 
         Logger::log("Обновлено свойство инфоблока {$id}", Logger::COLOR_GREEN);
@@ -48,25 +50,27 @@ class IBlockProperty
     /**
      * Удалить свойство инфоблока
      * @param $id
-     * @throws \Exception
+     * @throws Exception
      */
     public static function delete($id)
     {
-        if (!\CIBlockProperty::Delete($id)) {
-            throw new \Exception('Ошибка при удалении свойства инфоблока');
+        if (!CIBlockProperty::Delete($id)) {
+            throw new Exception('Ошибка при удалении свойства инфоблока');
         }
 
         Logger::log("Удалено свойство инфоблока {$id}", Logger::COLOR_GREEN);
     }
 
     /**
-     * Установить настройки для добавления свойства инфоблока по умолчанию
-     * @param string $code
-     * @param string $name
-     * @param int $iblockId
+     * Установить настройки для добавления свойства инфоблока по умолчанию.
+     *
+     * @param string  $code
+     * @param string  $name
+     * @param integer $iblockId
+     *
      * @return IBlockProperty
      */
-    public function constructDefault($code, $name, $iblockId)
+    public function constructDefault(string $code, string $name, int $iblockId) : self
     {
         return $this->setPropertyType('S')->setCode($code)->setName($name)->setIblockId($iblockId);
     }
@@ -85,10 +89,12 @@ class IBlockProperty
 
     /**
      * Внешний код.
+     *
      * @param string $xml_id
+     *
      * @return $this
      */
-    public function setXmlId($xml_id)
+    public function setXmlId(string $xml_id)
     {
         $this->fields['XML_ID'] = $xml_id;
 
@@ -97,10 +103,12 @@ class IBlockProperty
 
     /**
      * Код информационного блока.
-     * @param string $iblock_id
+     *
+     * @param integer $iblock_id
+     *
      * @return $this
      */
-    public function setIblockId($iblock_id)
+    public function setIblockId(int $iblock_id) : self
     {
         $this->fields['IBLOCK_ID'] = $iblock_id;
 
@@ -109,10 +117,12 @@ class IBlockProperty
 
     /**
      * Название.
+     *
      * @param string $name
+     *
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name) : self
     {
         $this->fields['NAME'] = $name;
 
@@ -207,12 +217,14 @@ class IBlockProperty
     }
 
     /**
-     * Установить тип свойства "привязка к элементам" или "привязка к группам"
-     * @param string $property_type Тип свойства. Возможные значения: E - привязка к элементам, G - привязка к группам.
-     * @param string $linkIblockId код информационного блока с элементами/группами которого и будут связано значение.
+     * Установить тип свойства "привязка к элементам" или "привязка к группам".
+     *
+     * @param string  $property_type Тип свойства. Возможные значения: E - привязка к элементам, G - привязка к группам.
+     * @param integer $linkIblockId  Код информационного блока с элементами/группами которого и будут связано значение.
+     *
      * @return $this
      */
-    public function setPropertyTypeIblock($property_type, $linkIblockId)
+    public function setPropertyTypeIblock(string $property_type, int $linkIblockId) : self
     {
         $this->setPropertyType($property_type)->setLinkIblockId($linkIblockId);
 
@@ -342,11 +354,14 @@ class IBlockProperty
     }
 
     /**
-     * Для свойств типа привязки к элементам и группам задает код информационного блока с элементами/группами которого и будут связано значение.
-     * @param int $linkIblockId
+     * Для свойств типа привязки к элементам и группам задает код информационного блока
+     * с элементами/группами которого и будут связано значение.
+     *
+     * @param integer $linkIblockId ID прилинкованного инфоблока.
+     *
      * @return $this
      */
-    public function setLinkIblockId($linkIblockId)
+    public function setLinkIblockId(int $linkIblockId) : self
     {
         $this->fields['LINK_IBLOCK_ID'] = $linkIblockId;
 
@@ -355,10 +370,12 @@ class IBlockProperty
 
     /**
      * Признак наличия у значения свойства дополнительного поля описания. Только для типов S - строка, N - число и F - файл (Y|N).
-     * @param bool $withDescription
+     *
+     * @param boolean $withDescription
+     *
      * @return $this
      */
-    public function setWithDescription($withDescription)
+    public function setWithDescription(bool $withDescription) : self
     {
         $this->fields['WITH_DESCRIPTION'] = $withDescription ? 'Y' : 'N';
 

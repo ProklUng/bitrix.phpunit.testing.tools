@@ -3,8 +3,6 @@
 namespace Prokl\BitrixTestingTools\Utils\EventDataGenerator;
 
 use Bitrix\Iblock\InheritedProperty\ElementTemplates;
-use Bitrix\Main\Loader;
-use CIBlock;
 use CIBlockElement;
 
 /**
@@ -75,135 +73,135 @@ class Generator
 
         $arFields['WF_PARENT_ELEMENT_ID'] = $idElement;
 
-        if (array_key_exists("IBLOCK_SECTION_ID", $arResult)) {
-            if (!array_key_exists("IBLOCK_SECTION", $arResult)) {
-                $arFields["IBLOCK_SECTION"] = [$arResult["IBLOCK_SECTION_ID"]];
-            } elseif (is_array($arResult["IBLOCK_SECTION"]) &&
-                !in_array($arResult["IBLOCK_SECTION_ID"], $arResult["IBLOCK_SECTION"])) {
-                unset($arFields["IBLOCK_SECTION_ID"]);
+        if (array_key_exists('IBLOCK_SECTION_ID', $arResult)) {
+            if (!array_key_exists('IBLOCK_SECTION', $arResult)) {
+                $arFields['IBLOCK_SECTION'] = [$arResult['IBLOCK_SECTION_ID']];
+            } elseif (is_array($arResult['IBLOCK_SECTION']) &&
+                !in_array($arResult['IBLOCK_SECTION_ID'], $arResult['IBLOCK_SECTION'])) {
+                unset($arFields['IBLOCK_SECTION_ID']);
             }
         }
 
         $arFields['NAME'] = $arResult['NAME'];
 
-        $ipropTemplates = new ElementTemplates($arFields["IBLOCK_ID"], 0);
-        if (is_set($arResult, "PREVIEW_PICTURE")) {
-            if (is_array($arResult["PREVIEW_PICTURE"])) {
-                $arFields["PREVIEW_PICTURE"]["MODULE_ID"] = "iblock";
-                $arFields["PREVIEW_PICTURE"]["name"] = \Bitrix\Iblock\Template\Helper::makeFileName(
+        $ipropTemplates = new ElementTemplates($arFields['IBLOCK_ID'], 0);
+        if (is_set($arResult, 'PREVIEW_PICTURE')) {
+            if (is_array($arResult['PREVIEW_PICTURE'])) {
+                $arFields['PREVIEW_PICTURE']['MODULE_ID'] = 'iblock';
+                $arFields['PREVIEW_PICTURE']['name'] = \Bitrix\Iblock\Template\Helper::makeFileName(
                     $ipropTemplates,
-                    "ELEMENT_PREVIEW_PICTURE_FILE_NAME",
+                    'ELEMENT_PREVIEW_PICTURE_FILE_NAME',
                     $arResult,
-                    $arResult["PREVIEW_PICTURE"]
+                    $arResult['PREVIEW_PICTURE']
                 );
             }
         }
 
-        if (is_set($arResult, "DETAIL_PICTURE")) {
-            if (is_array($arResult["DETAIL_PICTURE"])) {
-                $arFields["DETAIL_PICTURE"]["MODULE_ID"] = "iblock";
-                $arFields["DETAIL_PICTURE"]["name"] = \Bitrix\Iblock\Template\Helper::makeFileName(
+        if (is_set($arResult, 'DETAIL_PICTURE')) {
+            if (is_array($arResult['DETAIL_PICTURE'])) {
+                $arFields['DETAIL_PICTURE']['MODULE_ID'] = 'iblock';
+                $arFields['DETAIL_PICTURE']['name'] = \Bitrix\Iblock\Template\Helper::makeFileName(
                     $ipropTemplates,
-                    "ELEMENT_DETAIL_PICTURE_FILE_NAME",
+                    'ELEMENT_DETAIL_PICTURE_FILE_NAME',
                     $arResult,
-                    $arResult["DETAIL_PICTURE"]
+                    $arResult['DETAIL_PICTURE']
                 );
             }
         }
 
-        $arFields["ACTIVE"] = $arResult['ACTIVE'];
-        if (is_set($arResult, "ACTIVE") && $arResult["ACTIVE"] != "Y") {
-            $arFields["ACTIVE"] = "N";
+        $arFields['ACTIVE'] = $arResult['ACTIVE'];
+        if (is_set($arResult, 'ACTIVE') && $arResult['ACTIVE'] != 'Y') {
+            $arFields['ACTIVE'] = 'N';
         }
 
-        $arFields["PREVIEW_TEXT_TYPE"] = $arResult['PREVIEW_TEXT_TYPE'];
-        if (is_set($arResult, "PREVIEW_TEXT_TYPE") && $arResult["PREVIEW_TEXT_TYPE"] != "html") {
-            $arFields["PREVIEW_TEXT_TYPE"] = "text";
+        $arFields['PREVIEW_TEXT_TYPE'] = $arResult['PREVIEW_TEXT_TYPE'];
+        if (is_set($arResult, 'PREVIEW_TEXT_TYPE') && $arResult['PREVIEW_TEXT_TYPE'] != 'html') {
+            $arFields['PREVIEW_TEXT_TYPE'] = 'text';
         }
 
-        $arFields["DETAIL_TEXT_TYPE"] = $arResult['DETAIL_TEXT_TYPE'];
-        if (is_set($arResult, "DETAIL_TEXT_TYPE") && $arResult["DETAIL_TEXT_TYPE"] != "html") {
-            $arFields["DETAIL_TEXT_TYPE"] = "text";
+        $arFields['DETAIL_TEXT_TYPE'] = $arResult['DETAIL_TEXT_TYPE'];
+        if (is_set($arResult, 'DETAIL_TEXT_TYPE') && $arResult['DETAIL_TEXT_TYPE'] != 'html') {
+            $arFields['DETAIL_TEXT_TYPE'] = 'text';
         }
 
-        if (is_set($arResult, "DATE_ACTIVE_FROM")) {
-            $arFields["ACTIVE_FROM"] = $arResult["DATE_ACTIVE_FROM"];
+        if (is_set($arResult, 'DATE_ACTIVE_FROM')) {
+            $arFields['ACTIVE_FROM'] = $arResult['DATE_ACTIVE_FROM'];
         }
 
-        if (is_set($arResult, "DATE_ACTIVE_FROM")) {
-            $arFields["ACTIVE_FROM"] = $arResult["DATE_ACTIVE_FROM"];
+        if (is_set($arResult, 'DATE_ACTIVE_FROM')) {
+            $arFields['ACTIVE_FROM'] = $arResult['DATE_ACTIVE_FROM'];
         }
 
-        if (is_set($arResult, "ACTIVE_TO")) {
-            $arFields["ACTIVE_TO"] = $arResult["ACTIVE_TO"];
+        if (is_set($arResult, 'ACTIVE_TO')) {
+            $arFields['ACTIVE_TO'] = $arResult['ACTIVE_TO'];
         }
 
-        if (is_set($arResult, "EXTERNAL_ID")) {
-            $arFields["XML_ID"] = $arFields["EXTERNAL_ID"];
+        if (is_set($arResult, 'EXTERNAL_ID')) {
+            $arFields['XML_ID'] = $arFields['EXTERNAL_ID'];
         }
 
-        $arFields["SEARCHABLE_CONTENT"] = $arResult["NAME"];
+        $arFields['SEARCHABLE_CONTENT'] = $arResult['NAME'];
 
-        if (isset($arResult["PREVIEW_TEXT"])) {
-            if (isset($arResult["PREVIEW_TEXT_TYPE"]) && $arResult["PREVIEW_TEXT_TYPE"] === "html") {
-                $arFields["SEARCHABLE_CONTENT"] .= "\r\n".HTMLToTxt($arResult["PREVIEW_TEXT"]);
+        if (isset($arResult['PREVIEW_TEXT'])) {
+            if (isset($arResult['PREVIEW_TEXT_TYPE']) && $arResult['PREVIEW_TEXT_TYPE'] === 'html') {
+                $arFields['SEARCHABLE_CONTENT'] .= "\r\n".HTMLToTxt($arResult['PREVIEW_TEXT']);
             } else {
-                $arFields["SEARCHABLE_CONTENT"] .= "\r\n".$arResult["PREVIEW_TEXT"];
+                $arFields['SEARCHABLE_CONTENT'] .= "\r\n".$arResult['PREVIEW_TEXT'];
             }
         }
-        if (isset($arResult["DETAIL_TEXT"])) {
-            if (isset($arResult["DETAIL_TEXT_TYPE"]) && $arFields["$arResult"] === "html") {
-                $arFields["SEARCHABLE_CONTENT"] .= "\r\n".HTMLToTxt($arResult["DETAIL_TEXT"]);
+        if (isset($arResult['DETAIL_TEXT'])) {
+            if (isset($arResult['DETAIL_TEXT_TYPE']) && $arFields["$arResult"] === 'html') {
+                $arFields['SEARCHABLE_CONTENT'] .= "\r\n".HTMLToTxt($arResult['DETAIL_TEXT']);
             } else {
-                $arFields["SEARCHABLE_CONTENT"] .= "\r\n".$arResult["DETAIL_TEXT"];
+                $arFields['SEARCHABLE_CONTENT'] .= "\r\n".$arResult['DETAIL_TEXT'];
             }
         }
 
-        $arFields["SEARCHABLE_CONTENT"] = mb_strtoupper($arFields["SEARCHABLE_CONTENT"]);
+        $arFields['SEARCHABLE_CONTENT'] = mb_strtoupper($arFields['SEARCHABLE_CONTENT']);
 
-        $arFields["CREATED_BY"] = $arResult["CREATED_BY"];
-        $arFields["MODIFIED_BY"] = $arResult["MODIFIED_BY"];
+        $arFields['CREATED_BY'] = $arResult['CREATED_BY'];
+        $arFields['MODIFIED_BY'] = $arResult['MODIFIED_BY'];
 
         if (is_object($USER)) {
-            if (!isset($arResult["CREATED_BY"]) || intval($arResult["CREATED_BY"]) <= 0) {
-                $arFields["CREATED_BY"] = (int)$USER->GetID();
+            if (!isset($arResult['CREATED_BY']) || intval($arResult['CREATED_BY']) <= 0) {
+                $arFields['CREATED_BY'] = (int)$USER->GetID();
             }
-            if (!isset($arResult["MODIFIED_BY"]) || intval($arResult["MODIFIED_BY"]) <= 0) {
-                $arFields["MODIFIED_BY"] = (int)$USER->GetID();
+            if (!isset($arResult['MODIFIED_BY']) || intval($arResult['MODIFIED_BY']) <= 0) {
+                $arFields['MODIFIED_BY'] = (int)$USER->GetID();
             }
         }
 
-        $arFields["~TIMESTAMP_X"] = $arFields["~DATE_CREATE"] = $DB->CurrentTimeFunction();
+        $arFields['~TIMESTAMP_X'] = $arFields['~DATE_CREATE'] = $DB->CurrentTimeFunction();
 
-        if (array_key_exists("PREVIEW_PICTURE", $arResult)) {
-            $arFields["PREVIEW_PICTURE_ID"] = $arResult["PREVIEW_PICTURE"];
-            $arFields["PREVIEW_PICTURE"] = $arResult['PREVIEW_PICTURE'];
+        if (array_key_exists('PREVIEW_PICTURE', $arResult)) {
+            $arFields['PREVIEW_PICTURE_ID'] = $arResult['PREVIEW_PICTURE'];
+            $arFields['PREVIEW_PICTURE'] = $arResult['PREVIEW_PICTURE'];
         }
 
-        if (array_key_exists("DETAIL_PICTURE", $arResult)) {
-            $arFields["DETAIL_PICTURE_ID"] = $arResult["DETAIL_PICTURE"];
-            $arFields["DETAIL_PICTURE"] = $arResult['DETAIL_PICTURE'];
+        if (array_key_exists('DETAIL_PICTURE', $arResult)) {
+            $arFields['DETAIL_PICTURE_ID'] = $arResult['DETAIL_PICTURE'];
+            $arFields['DETAIL_PICTURE'] = $arResult['DETAIL_PICTURE'];
         }
 
-        $arElement["PROPERTY_VALUES"] = [];
+        $arElement['PROPERTY_VALUES'] = [];
 
         $obElement = new CIBlockElement;
         $n = 1;
-        $rsProperties = $obElement->GetProperty($arFields["IBLOCK_ID"], $arFields["ID"]);
+        $rsProperties = $obElement->GetProperty($arFields['IBLOCK_ID'], $arFields['ID']);
         while ($arProperty = $rsProperties->Fetch()) {
-            if (!array_key_exists($arProperty["ID"], $arElement["PROPERTY_VALUES"])) {
-                $arElement["PROPERTY_VALUES"][$arProperty["ID"]] = [];
+            if (!array_key_exists($arProperty['ID'], $arElement['PROPERTY_VALUES'])) {
+                $arElement['PROPERTY_VALUES'][$arProperty['ID']] = [];
             }
-            if ($arProperty["PROPERTY_TYPE"] === "F") {
-                $arElement["PROPERTY_VALUES"][$arProperty["ID"]]["n".$n] = [
-                    "VALUE" => $arProperty["VALUE"],
-                    "DESCRIPTION" => $arProperty["DESCRIPTION"],
+            if ($arProperty['PROPERTY_TYPE'] === 'F') {
+                $arElement['PROPERTY_VALUES'][$arProperty['ID']]['n'.$n] = [
+                    'VALUE' => $arProperty['VALUE'],
+                    'DESCRIPTION' => $arProperty['DESCRIPTION'],
                 ];
                 $n++;
             } else {
-                $arElement["PROPERTY_VALUES"][$arProperty["ID"]][$arProperty["PROPERTY_VALUE_ID"]] = [
-                    "VALUE" => $arProperty["VALUE"],
-                    "DESCRIPTION" => $arProperty["DESCRIPTION"],
+                $arElement['PROPERTY_VALUES'][$arProperty['ID']][$arProperty['PROPERTY_VALUE_ID']] = [
+                    'VALUE' => $arProperty['VALUE'],
+                    'DESCRIPTION' => $arProperty['DESCRIPTION'],
                 ];
             }
         }

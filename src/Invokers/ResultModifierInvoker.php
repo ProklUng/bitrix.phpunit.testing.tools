@@ -80,15 +80,14 @@ class ResultModifierInvoker extends BaseInvoker
     /**
      * Выполнить result_modifier.php.
      *
-     * @throws Exception
-     *
      * @return void
+     * @throws Exception
      *
      * После выполнения получить результат через getArResult.
      */
     public function execute() : void
     {
-        /** @var CBitrixComponentTemplate $template */
+        /** @var CBitrixComponentTemplate|null $template */
         $template = $this->component->getTemplate();
         if ($template === null) {
             throw new Exception('Component template has not found.');
@@ -106,7 +105,7 @@ class ResultModifierInvoker extends BaseInvoker
         $arResult = $this->initialArResult;
         $arParams = $this->arParams;
 
-        $func = function () use (&$arResult, &$arParams) {
+        $func = function () use (&$arResult, &$arParams) : void {
             include func_get_arg(0);
         };
 

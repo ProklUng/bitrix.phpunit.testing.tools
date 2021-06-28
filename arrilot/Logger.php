@@ -2,6 +2,10 @@
 
 namespace Arrilot\BitrixMigrationsFork;
 
+/**
+ * Class Logger
+ * @package Arrilot\BitrixMigrationsFork
+ */
 class Logger
 {
     const COLOR_BLACK = '0;30';
@@ -21,9 +25,13 @@ class Logger
     const COLOR_LIGHT_GRAY = '0;37';
     const COLOR_WHITE = '1;37';
 
-    public static function log($string, $foreground_color = null)
+    /**
+     * @param string      $string           Строка.
+     * @param string|null $foreground_color Цвет фона.
+     */
+    public static function log(string $string, ?string $foreground_color = null)
     {
-        $colored_string = "";
+        $colored_string = '';
 
         if ($foreground_color) {
             $colored_string .= "\033[" . $foreground_color . "m";

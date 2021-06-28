@@ -10,6 +10,10 @@ use CIBlock;
 use CIBlockProperty;
 use CUserTypeEntity;
 
+/**
+ * Class BitrixMigration
+ * @package Arrilot\BitrixMigrationsFork\BaseMigrations
+ */
 class BitrixMigration implements MigrationInterface
 {
     /**
@@ -20,7 +24,7 @@ class BitrixMigration implements MigrationInterface
     protected $db;
 
     /**
-     * @var bool
+     * @var boolean|null $use_transaction
      */
     public $use_transaction = null;
 
@@ -33,9 +37,8 @@ class BitrixMigration implements MigrationInterface
     }
 
     /**
-     * Run the migration.
-     *
-     * @return mixed
+     * @inheritDoc
+     * @psalm-suppress InvalidReturnType
      */
     public function up()
     {
@@ -43,9 +46,8 @@ class BitrixMigration implements MigrationInterface
     }
 
     /**
-     * Reverse the migration.
-     *
-     * @return mixed
+     * @inheritDoc
+     * @psalm-suppress InvalidReturnType
      */
     public function down()
     {
@@ -53,9 +55,7 @@ class BitrixMigration implements MigrationInterface
     }
 
     /**
-     * Does migration use transaction
-     * @param bool $default
-     * @return bool
+     * @inheritDoc
      */
     public function useTransaction($default = false)
     {
@@ -69,14 +69,14 @@ class BitrixMigration implements MigrationInterface
     /**
      * Find iblock id by its code.
      *
-     * @param string $code
-     * @param null|string $iBlockType
+     * @param string      $code       Код инфоблока.
+     * @param null|string $iBlockType Тип инфоблока.
      *
      * @throws MigrationException
      *
-     * @return int
+     * @return integer
      */
-    protected function getIblockIdByCode($code, $iBlockType = null)
+    protected function getIblockIdByCode(string $code, ?string $iBlockType = null) : int
     {
         if (!$code) {
             throw new MigrationException('Не задан код инфоблока');
@@ -97,19 +97,19 @@ class BitrixMigration implements MigrationInterface
             throw new MigrationException("Не удалось найти инфоблок с кодом '{$code}'");
         }
 
-        return $iblock['ID'];
+        return (int)$iblock['ID'];
     }
 
     /**
      * Delete iblock by its code.
      *
-     * @param string $code
+     * @param string $code Код инфоблока.
      *
-     * @throws MigrationException
+     * @throws MigrationException Когда не удалось удалить инфоблок.
      *
      * @return void
      */
-    protected function deleteIblockByCode($code)
+    protected function deleteIblockByCode(string $code) : void
     {
         $id = $this->getIblockIdByCode($code);
 
@@ -125,13 +125,12 @@ class BitrixMigration implements MigrationInterface
     /**
      * Add iblock element property.
      *
-     * @param array $fields
+     * @param array $fields Значения полей.
      *
+     * @return integer
      * @throws MigrationException
-     *
-     * @return int
      */
-    public function addIblockElementProperty($fields)
+    public function addIblockElementProperty(array $fields)
     {
         $ibp = new CIBlockProperty();
         $propId = $ibp->add($fields);
@@ -146,12 +145,14 @@ class BitrixMigration implements MigrationInterface
     /**
      * Delete iblock element property.
      *
-     * @param string     $code
-     * @param string|int $iblockId
+     * @param integer $iblockId ID инфоблока.
+     * @param string  $code     Код инфоблока.
+     *
+     * @return void
      *
      * @throws MigrationException
      */
-    public function deleteIblockElementPropertyByCode($iblockId, $code)
+    public function deleteIblockElementPropertyByCode($iblockId, string $code)
     {
         if (!$iblockId) {
             throw new MigrationException('Не задан ID инфоблока');
@@ -169,13 +170,13 @@ class BitrixMigration implements MigrationInterface
     /**
      * Add User Field.
      *
-     * @param $fields
+     * @param array $fields Значения полей.
      *
      * @throws MigrationException
      *
-     * @return int
+     * @return integer
      */
-    public function addUF($fields)
+    public function addUF(array $fields)
     {
         if (!$fields['FIELD_NAME']) {
             throw new MigrationException('Не заполнен FIELD_NAME');
@@ -190,7 +191,9 @@ class BitrixMigration implements MigrationInterface
         $fieldId = $oUserTypeEntity->Add($fields);
 
         if (!$fieldId) {
-            throw new MigrationException("Не удалось создать пользовательское свойство с FIELD_NAME = {$fields['FIELD_NAME']} и ENTITY_ID = {$fields['ENTITY_ID']}");
+            throw new MigrationException(
+                "Не удалось создать пользовательское свойство с FIELD_NAME = {$fields['FIELD_NAME']} и ENTITY_ID = {$fields['ENTITY_ID']}"
+            );
         }
 
         return $fieldId;
@@ -199,12 +202,13 @@ class BitrixMigration implements MigrationInterface
     /**
      * Get UF by its code.
      *
-     * @param string $entity
-     * @param string $code
+     * @param string $entity Сущность свойства.
+     * @param string $code   Код свойства.
      *
+     * @return integer
      * @throws MigrationException
      */
-    public function getUFIdByCode($entity, $code)
+    public function getUFIdByCode(string $entity, string $code)
     {
         if (!$entity) {
             throw new MigrationException('Не задана сущность свойства');
@@ -228,14 +232,14 @@ class BitrixMigration implements MigrationInterface
     }
 
     /**
-     * @param $code
-     * @param $iblockId
+     * @param string  $code
+     * @param integer $iblockId
      *
      * @throws MigrationException
      *
-     * @return array
+     * @return integer
      */
-    protected function getIblockPropIdByCode($code, $iblockId)
+    protected function getIblockPropIdByCode(string $code, int $iblockId) : int
     {
         $filter = [
             'CODE'      => $code,
@@ -247,20 +251,19 @@ class BitrixMigration implements MigrationInterface
             throw new MigrationException("Не удалось найти свойство с кодом '{$code}'");
         }
 
-        return $prop['ID'];
+        return (int)$prop['ID'];
     }
 
     /**
-     * @param integer        $idIblock
-     * @param integer|string $code
-     * @param array          $fields
+     * @param integer        $idIblock ID инфоблока.
+     * @param integer|string $code     Код свойства.
+     * @param array          $fields   Поля.
      *
      * @return void
      * @throws MigrationException
      */
-    public function updateProperty(int $idIblock, string $code, array $fields) : void
+    public function updateProperty(int $idIblock, $code, array $fields) : void
     {
-        $idIblock = (int)$idIblock;
         if ($idIblock <= 0) {
             throw new MigrationException('You must set iblock id due to ambiguity avoiding');
         }

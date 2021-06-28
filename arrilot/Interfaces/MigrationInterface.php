@@ -7,21 +7,23 @@ interface MigrationInterface
     /**
      * Run the migration.
      *
-     * @return void
+     * @return mixed
      */
     public function up();
 
     /**
      * Reverse the migration.
      *
-     * @return void
+     * @return mixed
      */
     public function down();
 
     /**
      * use transaction
      *
-     * @return bool
+     * @param boolean $default Default value.
+     *
+     * @return boolean
      */
     public function useTransaction($default = false);
 }
